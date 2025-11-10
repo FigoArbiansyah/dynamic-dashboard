@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Menu -->
+    <menuitem id="menu_dashboard_root" 
+              name="Dashboards" 
+              sequence="10"
+              web_icon="dynamic_dashboard,static/src/img/dynamic-dashboard.png"/>
+
+    <!-- Dashboard Menu -->
+    <menuitem id="menu_dashboard_board" 
+              name="My Dashboards" 
+              parent="menu_dashboard_root" 
+              action="action_dashboard_board" 
+              sequence="10"/>
+
+    <!-- Charts Menu -->
+    <menuitem id="menu_dashboard_chart" 
+              name="Chart Configuration" 
+              parent="menu_dashboard_root" 
+              action="action_dashboard_chart" 
+              sequence="20"/>
+
+    <!-- Dashboard View Action -->
+    <record id="action_dashboard_view" model="ir.actions.client">
+        <field name="name">Dashboard View</field>
+        <field name="tag">dynamic_dashboard</field>
+    </record>
+
+    <!-- Dashboard View Menu -->
+    <menuitem id="menu_dashboard_view" 
+              name="Dashboard View" 
+              parent="menu_dashboard_root" 
+              action="action_dashboard_view" 
+              sequence="5"/>
+</odoo>

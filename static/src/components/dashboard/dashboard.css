@@ -1,0 +1,76 @@
+.o_dashboard_view {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9fa;
+
+    .o_control_panel {
+        background: white;
+        padding: 15px 20px;
+        border-bottom: 1px solid #dee2e6;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+        .o_cp_title {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #212529;
+        }
+
+        .o_cp_right {
+            margin-left: auto;
+        }
+    }
+
+    .o_content {
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .o_dashboard_selector {
+        border-bottom: 1px solid #dee2e6;
+        
+        label {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        select {
+            min-width: 250px;
+            max-width: 400px;
+        }
+    }
+
+    .o_dashboard_charts {
+        .o_chart_container {
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            }
+
+            .card-header {
+                background-color: #f8f9fa;
+                border-bottom: 1px solid #dee2e6;
+                padding: 12px 15px;
+
+                .card-title {
+                    font-size: 1rem;
+                    font-weight: 500;
+                    color: #495057;
+                }
+            }
+
+            .card-body {
+                padding: 20px;
+                
+                canvas {
+                    max-height: 100%;
+                }
+            }
+        }
+    }
+}
