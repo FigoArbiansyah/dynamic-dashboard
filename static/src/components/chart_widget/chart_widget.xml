@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+
+<t t-name="dynamic_dashboard.ChartWidget" owl="1">
+    <div class="dd-chart-widget">
+        <div class="dd-chart-header">
+            <span class="dd-chart-title" t-esc="props.comp.label || props.comp.name"/>
+            <i t-att-class="'fa fa-' + (
+                props.comp.chart_type === 'pie' ? 'pie-chart' :
+                props.comp.chart_type === 'line' ? 'line-chart' :
+                'bar-chart'
+            )"/>
+        </div>
+        <div class="dd-chart-canvas-wrap">
+            <canvas t-ref="canvas"/>
+        </div>
+    </div>
+</t>
+
+</templates>

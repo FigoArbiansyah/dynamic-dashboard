@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+
+<t t-name="dynamic_dashboard.ConfigDialog" owl="1">
+    <Dialog title="props.component ? 'Edit Component' : 'Add Component'" size="'lg'">
+
+        <div class="dd-config-dialog">
+
+            <!-- Row 1: Name + Type -->
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label class="form-label fw-bold">Name *</label>
+                    <input type="text" class="form-control" placeholder="Component name"
+                           t-model="state.name"/>
+                </div>
+                <div class="col-6">
+                    <label class="form-label fw-bold">Type *</label>
+                    <select class="form-select" t-on-change="onTypeChange">
+                        <option value="card_count" t-att-selected="state.type === 'card_count'">Card — Count</option>
+                        <option value="card_sum"   t-att-selected="state.type === 'card_sum'">Card — Sum</option>
+                        <option value="chart"      t-att-selected="state.type === 'chart'">Chart</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Row 2: Model + Domain -->
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label class="form-label fw-bold">Model *</label>
+                    <select class="form-select" t-on-change="onModelChange">
+                        <option value="">-- Select model --</option>
+                        <t t-foreach="state.availableModels" t-as="m" t-key="m.model">
+                            <option t-att-value="m.model"
+                                    t-att-selected="state.model_name === m.model">
+                                <t t-esc="m.name"/> (<t t-esc="m.model"/>)
+                            </option>
+                        </t>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label class="form-label fw-bold">Domain Filter</label>
+                    <input type="text" class="form-control font-monospace"
+                           placeholder="e.g. [['state','=','done']]"
+                           t-model="state.domain"/>
+                    <small class="text-muted">Odoo domain syntax</small>
+                </div>
+            </div>
+
+            <!-- Card config -->
+            <t t-if="isCard">
+                <hr/>
+                <h6 class="dd-section-title">Card Configuration</h6>
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <label class="form-label">Label / Title</label>
+                        <input type="text" class="form-control" t-model="state.label"/>
+                    </div>
+                    <div class="col-3">
+                        <label class="form-label">Color</label>
+                        <input type="color" class="form-control form-control-color w-100"
+                               t-model="state.color"/>
+                    </div>
+                    <div class="col-3">
+                        <label class="form-label">Style</label>
+                        <select class="form-select" t-model="state.card_style">
+                            <option value="solid">Solid</option>
+                            <option value="outline">Outline</option>
+                            <option value="gradient">Gradient</option>
+                            <option value="soft">Soft</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <label class="form-label">Icon (FA class)</label>
+                        <input type="text" class="form-control" placeholder="fa-users"
+                               t-model="state.icon"/>
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label">Prefix</label>
+                        <input type="text" class="form-control" placeholder="Rp"
+                               t-model="state.prefix"/>
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label">Suffix</label>
+                        <input type="text" class="form-control" placeholder="items"
+                               t-model="state.suffix"/>
+                    </div>
+                </div>
+                <t t-if="state.type === 'card_sum'">
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-bold">Sum Field *</label>
+                            <select class="form-select" t-model="state.measure_field_name">
+                                <option value="">-- Select numeric field --</option>
+                                <t t-foreach="state.numericFields" t-as="f" t-key="f.name">
+                                    <option t-att-value="f.name"><t t-esc="f.label"/> (<t t-esc="f.name"/>)</option>
+                                </t>
+                            </select>
+                        </div>
+                    </div>
+                </t>
+            </t>
+
+            <!-- Chart config -->
+            <t t-if="isChart">
+                <hr/>
+                <h6 class="dd-section-title">Chart Configuration</h6>
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <label class="form-label fw-bold">Chart Type</label>
+                        <select class="form-select" t-model="state.chart_type">
+                            <option value="bar">Bar</option>
+                            <option value="line">Line</option>
+                            <option value="pie">Pie</option>
+                            <option value="doughnut">Doughnut</option>
+                            <option value="polarArea">Polar Area</option>
+                            <option value="radar">Radar</option>
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label fw-bold">Group By</label>
+                        <select class="form-select" t-model="state.group_by_field_name">
+                            <option value="">-- Select field --</option>
+                            <t t-foreach="state.allFields" t-as="f" t-key="f.name">
+                                <option t-att-value="f.name"><t t-esc="f.label"/> (<t t-esc="f.type"/>)</option>
+                            </t>
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label">Measure (optional)</label>
+                        <select class="form-select" t-model="state.measure_field_name">
+                            <option value="">-- Count (default) --</option>
+                            <t t-foreach="state.numericFields" t-as="f" t-key="f.name">
+                                <option t-att-value="f.name"><t t-esc="f.label"/></option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-4">
+                        <label class="form-label">Label</label>
+                        <input type="text" class="form-control" t-model="state.label"/>
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label">Color</label>
+                        <input type="color" class="form-control form-control-color w-100"
+                               t-model="state.color"/>
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label">Dataset Label</label>
+                        <input type="text" class="form-control" t-model="state.chart_label"/>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="chart_legend"
+                                   t-model="state.chart_legend"/>
+                            <label class="form-check-label" for="chart_legend">Show Legend</label>
+                        </div>
+                    </div>
+                </div>
+            </t>
+
+            <!-- Layout -->
+            <hr/>
+            <h6 class="dd-section-title">Grid Size</h6>
+            <div class="row mb-2">
+                <div class="col-6">
+                    <label class="form-label">Width (columns, 1–12)</label>
+                    <input type="number" class="form-control" min="1" max="12"
+                           t-model="state.pos_w"/>
+                </div>
+                <div class="col-6">
+                    <label class="form-label">Height (rows, 1–6)</label>
+                    <input type="number" class="form-control" min="1" max="6"
+                           t-model="state.pos_h"/>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <t t-set-slot="footer">
+            <button class="btn btn-secondary" t-on-click="props.close">Cancel</button>
+            <button class="btn btn-primary" t-on-click="save" t-att-disabled="state.saving">
+                <t t-if="state.saving">Saving...</t>
+                <t t-else="">Save Component</t>
+            </button>
+        </t>
+    </Dialog>
+</t>
+
+</templates>

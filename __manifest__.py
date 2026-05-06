@@ -1,37 +1,34 @@
 {
     'name': 'Dynamic Dashboard',
+    'version': '17.0.2.0.0',
     'category': 'Tools',
-    'summary': 'Create dynamic dashboards with Chart.js',
-    'description': """
-        Dynamic Dashboard Module
-        ========================
-        - Create multiple dashboards
-        - Add/Edit/Remove charts dynamically
-        - Support multiple chart types (bar, line, pie, doughnut)
-        - Flexible model selection
-        - Real-time data visualization
-    """,
+    'summary': 'Configurable dashboard with cards, charts, drag & drop, ACL',
     'author': 'Figo Arbiansyah',
     'website': 'https://www.figo.my.id',
     'depends': ['base', 'web'],
     'data': [
+        'security/dashboard_security.xml',
         'security/ir.model.access.csv',
-        'views/dashboard_views.xml',
-        'views/dashboard_chart_views.xml',
+        'views/dashboard_board_views.xml',
+        'views/dashboard_component_views.xml',
         'views/menu_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
+            'dynamic_dashboard/static/src/scss/dashboard.scss',
             'dynamic_dashboard/static/src/components/dashboard/dashboard.js',
-            "dynamic_dashboard/static/src/components/chart/chart.js",
             'dynamic_dashboard/static/src/components/dashboard/dashboard.xml',
-            "dynamic_dashboard/static/src/components/chart/chart.xml",
-            'dynamic_dashboard/static/src/components/**/*.js',
-            'dynamic_dashboard/static/src/components/**/*.xml',
-            'dynamic_dashboard/static/src/components/**/*.css',
+            'dynamic_dashboard/static/src/components/card_metric/card_metric.js',
+            'dynamic_dashboard/static/src/components/card_metric/card_metric.xml',
+            'dynamic_dashboard/static/src/components/chart_widget/chart_widget.js',
+            'dynamic_dashboard/static/src/components/chart_widget/chart_widget.xml',
+            'dynamic_dashboard/static/src/components/config_dialog/config_dialog.js',
+            'dynamic_dashboard/static/src/components/config_dialog/config_dialog.xml',
         ],
     },
+    'pre_init_hook': 'pre_init_hook',
     'installable': True,
     'application': True,
     'license': 'LGPL-3',
+    'images': [],
 }

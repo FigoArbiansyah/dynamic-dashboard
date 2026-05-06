@@ -1,3 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_dashboard_board_user,dashboard.board.user,model_dashboard_board,base.group_user,1,1,1,1
-access_dashboard_chart_user,dashboard.chart.user,model_dashboard_chart,base.group_user,1,1,1,1
+access_dashboard_board_user,Dashboard Board User,model_dashboard_board,group_dashboard_user,1,0,0,0
+access_dashboard_board_manager,Dashboard Board Manager,model_dashboard_board,group_dashboard_manager,1,1,1,1
+access_dashboard_component_user,Dashboard Component User,model_dashboard_component,group_dashboard_user,1,0,0,0
+access_dashboard_component_manager,Dashboard Component Manager,model_dashboard_component,group_dashboard_manager,1,1,1,1
+access_dashboard_card_config_user,Dashboard Card Config User,model_dashboard_card_config,group_dashboard_user,1,0,0,0
+access_dashboard_card_config_manager,Dashboard Card Config Manager,model_dashboard_card_config,group_dashboard_manager,1,1,1,1

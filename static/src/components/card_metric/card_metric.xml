@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+
+<t t-name="dynamic_dashboard.CardMetric" owl="1">
+    <div t-att-class="cardClass + (isClickable ? ' dd-card--clickable' : '')"
+         t-att-style="cardStyle"
+         t-on-click="handleClick">
+
+        <div class="dd-card-icon">
+            <i t-att-class="'fa ' + (props.comp.icon || 'fa-chart-bar')"
+               t-att-style="iconStyle"/>
+        </div>
+
+        <div class="dd-card-body">
+            <div class="dd-card-label" t-esc="props.comp.label || props.comp.name"/>
+            <div class="dd-card-value">
+                <t t-if="props.comp.prefix">
+                    <span class="dd-card-prefix" t-esc="props.comp.prefix"/>
+                </t>
+                <span t-esc="formattedValue"/>
+                <t t-if="props.comp.suffix">
+                    <span class="dd-card-suffix" t-esc="props.comp.suffix"/>
+                </t>
+            </div>
+        </div>
+
+        <t t-if="isClickable">
+            <div class="dd-card-arrow">
+                <i class="fa fa-arrow-right"/>
+            </div>
+        </t>
+    </div>
+</t>
+
+</templates>

@@ -1,75 +1,104 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <templates xml:space="preserve">
-    <t t-name="dynamic_dashboard.DashboardView">
-        <div class="o_dashboard_view">
-            <div class="o_control_panel d-flex">
-                <div class="o_cp_left">
-                    <h2 class="o_cp_title">Dashboard</h2>
-                </div>
-                <div class="o_cp_right">
-                    <button class="btn btn-primary me-2" t-on-click="openDashboardForm">
-                        <i class="fa fa-plus"/> Manage Dashboards
+
+<t t-name="dynamic_dashboard.DashboardView" owl="1">
+    <div class="dd-dashboard">
+
+        <!-- Loading state -->
+        <t t-if="state.loading">
+            <div class="dd-loading">
+                <div class="dd-spinner"/>
+                <span>Loading dashboard...</span>
+            </div>
+        </t>
+
+        <!-- Error state -->
+        <t t-elif="state.error">
+            <div class="dd-error">
+                <i class="fa fa-exclamation-triangle"/>
+                <p t-esc="state.error"/>
+            </div>
+        </t>
+
+        <!-- Dashboard content -->
+        <t t-else="">
+            <!-- Header toolbar -->
+            <div class="dd-header">
+                <h2 class="dd-title" t-esc="state.boardData.name"/>
+                <div class="dd-toolbar" t-if="state.canEdit">
+                    <button class="btn btn-sm btn-secondary" t-on-click="toggleEditMode">
+                        <i t-att-class="state.editMode ? 'fa fa-check' : 'fa fa-edit'"/>
+                        <t t-esc="state.editMode ? ' Done' : ' Edit Layout'"/>
                     </button>
-                    <button class="btn btn-secondary" t-on-click="refreshDashboard">
-                        <i class="fa fa-refresh"/> Refresh
+                    <button class="btn btn-sm btn-primary" t-if="state.editMode"
+                            t-on-click="openAddComponent">
+                        <i class="fa fa-plus"/> Add Component
                     </button>
                 </div>
             </div>
 
-            <div class="o_content">
-                <!-- Dashboard Selector -->
-                <div class="o_dashboard_selector p-3 bg-light">
-                    <label class="me-2 fw-bold">Select Dashboard:</label>
-                    <select class="form-select d-inline-block w-auto"
-                            t-on-change="selectDashboard">
-                        <t t-foreach="state.dashboards" t-as="dashboard" t-key="dashboard.id">
-                            <option t-att-value="dashboard.id"
-                                    t-att-selected="dashboard.id === state.selectedDashboard">
-                                <t t-esc="dashboard.name"/>
-                            </option>
-                        </t>
-                    </select>
-                </div>
+            <!-- Grid -->
+            <div class="dd-grid" t-ref="grid">
+                <t t-foreach="state.boardData.components" t-as="comp" t-key="comp.id">
+                    <div class="dd-component"
+                         t-att-data-comp-id="comp.id"
+                         t-att-data-x="comp.pos ? comp.pos.x : 0"
+                         t-att-data-y="comp.pos ? comp.pos.y : 0"
+                         t-att-data-w="comp.pos ? comp.pos.w : 4"
+                         t-att-data-h="comp.pos ? comp.pos.h : 2"
+                         t-att-style="'grid-column: span ' + (comp.pos ? comp.pos.w : 4)">
 
-                <!-- Loading -->
-                <div t-if="state.loading" class="text-center p-5">
-                    <i class="fa fa-spinner fa-spin fa-3x text-muted"/>
-                    <p class="text-muted mt-3">Loading...</p>
-                </div>
+                        <!-- Drag handle (edit mode only) -->
+                        <div class="dd-drag-handle" t-if="state.editMode">
+                            <i class="fa fa-grip-vertical"/>
+                        </div>
 
-                <!-- No Dashboard -->
-                <div t-elif="state.dashboards.length === 0" class="text-center p-5">
-                    <i class="fa fa-bar-chart fa-3x text-muted mb-3"/>
-                    <h4 class="text-muted">No Dashboards Found</h4>
-                    <p class="text-muted">Create your first dashboard to get started</p>
-                    <button class="btn btn-primary" t-on-click="openDashboardForm">
-                        <i class="fa fa-plus"/> Create Dashboard
-                    </button>
-                </div>
+                        <!-- Edit/Delete controls -->
+                        <div class="dd-comp-actions" t-if="state.editMode">
+                            <button class="btn btn-xs btn-light" t-on-click="() => this.openEditComponent(comp)">
+                                <i class="fa fa-cog"/>
+                            </button>
+                            <button class="btn btn-xs btn-light" t-on-click="() => this.refreshComponent(comp)">
+                                <i class="fa fa-refresh"/>
+                            </button>
+                            <button class="btn btn-xs btn-danger" t-on-click="() => this.deleteComponent(comp.id)">
+                                <i class="fa fa-trash"/>
+                            </button>
+                        </div>
 
-                <!-- Charts Grid -->
-                <div t-elif="state.charts.length > 0" class="o_dashboard_charts p-3">
-                    <div class="row">
-                        <t t-foreach="state.charts" t-as="chart" t-key="chart.id">
-                            <div class="col-md-6 col-lg-6 mb-4">
-                                <ChartComponent
-                                    chartId="chart.id"
-                                    chartName="chart.name"
-                                    chartType="chart.chart_type"
-                                    colorScheme="chart.color_scheme"
-                                    onEdit.bind="editChart"/>
+                        <!-- Error display -->
+                        <t t-if="comp.error">
+                            <div class="dd-comp-error">
+                                <i class="fa fa-warning"/> <t t-esc="comp.error"/>
                             </div>
                         </t>
-                    </div>
-                </div>
 
-                <!-- No Charts -->
-                <div t-else="" class="text-center p-5">
-                    <i class="fa fa-line-chart fa-3x text-muted mb-3"/>
-                    <h4 class="text-muted">No Charts in this Dashboard</h4>
-                    <p class="text-muted">Add charts to visualize your data</p>
-                </div>
+                        <!-- Card Metric -->
+                        <t t-elif="comp.type === 'card_count' or comp.type === 'card_sum'">
+                            <CardMetric comp="comp" onCardClick="() => this.onCardClick(comp)"/>
+                        </t>
+
+                        <!-- Chart -->
+                        <t t-elif="comp.type === 'chart'">
+                            <ChartWidget comp="comp"/>
+                        </t>
+                    </div>
+                </t>
+
+                <!-- Empty state -->
+                <t t-if="state.boardData.components.length === 0">
+                    <div class="dd-empty">
+                        <i class="fa fa-tachometer fa-3x"/>
+                        <p>No components yet.</p>
+                        <button class="btn btn-primary" t-if="state.canEdit"
+                                t-on-click="openAddComponent">
+                            Add your first component
+                        </button>
+                    </div>
+                </t>
             </div>
-        </div>
-    </t>
+        </t>
+    </div>
+</t>
+
 </templates>

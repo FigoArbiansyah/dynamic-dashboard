@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ── Tree View ── -->
+        <record id="view_dashboard_component_list" model="ir.ui.view">
+            <field name="name">dashboard.component.tree</field>
+            <field name="model">dashboard.component</field>
+            <field name="arch" type="xml">
+                <tree string="Components">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="board_id"/>
+                    <field name="type"/>
+                    <field name="model_id"/>
+                    <field name="label"/>
+                    <field name="is_active"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ── Form View ── -->
+        <record id="view_dashboard_component_form" model="ir.ui.view">
+            <field name="name">dashboard.component.form</field>
+            <field name="model">dashboard.component</field>
+            <field name="arch" type="xml">
+                <form string="Dashboard Component">
+                    <sheet>
+                        <group>
+                            <group string="General">
+                                <field name="board_id"/>
+                                <field name="name"/>
+                                <field name="type"/>
+                                <field name="sequence"/>
+                                <field name="is_active"/>
+                            </group>
+                            <group string="Data Source">
+                                <field name="model_id"/>
+                                <field name="domain" widget="domain"
+                                       invisible="not model_id"
+                                       options="{'model': 'model_name'}"/>
+                                <field name="model_name" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Card Configuration"
+                                  invisible="type == 'chart'">
+                                <group>
+                                    <group>
+                                        <field name="label"/>
+                                        <field name="icon"/>
+                                        <field name="color" widget="color"/>
+                                        <field name="card_style"/>
+                                        <field name="prefix"/>
+                                        <field name="suffix"/>
+                                    </group>
+                                    <group>
+                                        <field name="measure_field_id"
+                                               invisible="type != 'card_sum'"/>
+                                        <field name="click_action_id"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Chart Configuration"
+                                  invisible="type != 'chart'">
+                                <group>
+                                    <group>
+                                        <field name="chart_type"/>
+                                        <field name="group_by_field_id"/>
+                                        <field name="measure_field_id"/>
+                                        <field name="chart_label"/>
+                                    </group>
+                                    <group>
+                                        <field name="chart_legend"/>
+                                        <field name="label"/>
+                                        <field name="color" widget="color"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Layout &amp; Access">
+                                <group>
+                                    <group string="Grid Position">
+                                        <field name="pos_x"/>
+                                        <field name="pos_y"/>
+                                        <field name="pos_w"/>
+                                        <field name="pos_h"/>
+                                    </group>
+                                    <group string="Access Control">
+                                        <field name="group_ids" widget="many2many_tags"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ── Action ── -->
+        <record id="action_dashboard_component" model="ir.actions.act_window">
+            <field name="name">Dashboard Components</field>
+            <field name="res_model">dashboard.component</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>
