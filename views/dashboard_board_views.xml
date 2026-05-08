@@ -24,27 +24,31 @@
             <field name="model">dashboard.board</field>
             <field name="arch" type="xml">
                 <form string="Dashboard">
-                    <header>
-                        <button name="action_view_components" type="object"
-                                string="View Components" class="btn-secondary"/>
-                    </header>
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_components" type="object" class="oe_stat_button" icon="fa-th-large">
+                                <field name="component_count" string="Components" widget="statinfo"/>
+                            </button>
+                        </div>
                         <div class="oe_title">
+                            <label for="name"/>
                             <h1>
-                                <field name="name" placeholder="Dashboard name..."/>
+                                <field name="name" placeholder="e.g. Sales Performance..."/>
                             </h1>
                         </div>
                         <group>
-                            <group string="Configuration">
-                                <field name="menu_parent_id"/>
-                                <field name="menu_id"/>
-                                <field name="dashboard_action_id" readonly="1"/>
-                                <field name="is_active"/>
-                                <field name="cache_ttl"/>
-                                <field name="company_id" groups="base.group_multi_company"/>
+                            <group string="Navigation &amp; Menu">
+                                <field name="menu_parent_id" placeholder="Parent Menu..."/>
+                                <field name="menu_id" readonly="1" help="The actual menu item linked to this dashboard."/>
+                                <field name="dashboard_action_id" invisible="not dashboard_action_id" readonly="1"/>
                             </group>
-                            <group string="Access Control">
-                                <field name="group_ids" widget="many2many_tags"/>
+                            <group string="Settings">
+                                <field name="is_active" widget="boolean_toggle"/>
+                                <field name="cache_ttl" placeholder="300"/>
+                                <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                            </group>
+                            <group string="Security">
+                                <field name="group_ids" widget="many2many_tags" placeholder="Grant access to..."/>
                             </group>
                         </group>
                         <notebook>

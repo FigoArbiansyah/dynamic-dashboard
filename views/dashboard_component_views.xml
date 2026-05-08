@@ -26,67 +26,76 @@
             <field name="arch" type="xml">
                 <form string="Dashboard Component">
                     <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="e.g. Monthly Revenue..."/>
+                            </h1>
+                        </div>
                         <group>
-                            <group string="General">
-                                <field name="board_id"/>
-                                <field name="name"/>
-                                <field name="type"/>
-                                <field name="sequence"/>
-                                <field name="is_active"/>
+                            <group string="Basic Info">
+                                <field name="board_id" options="{'no_create': True}"/>
+                                <field name="type" widget="radio" options="{'horizontal': true}"/>
+                                <field name="is_active" widget="boolean_toggle"/>
                             </group>
                             <group string="Data Source">
-                                <field name="model_id"/>
+                                <field name="model_id" options="{'no_create': True}" placeholder="Select model..."/>
+                                <field name="model_name" invisible="1"/>
                                 <field name="domain" widget="domain"
                                        invisible="not model_id"
                                        options="{'model': 'model_name'}"/>
-                                <field name="model_name" invisible="1"/>
                             </group>
                         </group>
                         <notebook>
-                            <page string="Card Configuration"
-                                  invisible="type == 'chart'">
+                            <page string="Configuration" name="config">
                                 <group>
-                                    <group>
-                                        <field name="label"/>
-                                        <field name="icon"/>
+                                    <!-- Card Specific -->
+                                    <group string="Card Visuals" invisible="type == 'chart'">
+                                        <field name="label" placeholder="Display title on card"/>
+                                        <field name="icon" placeholder="fa-shopping-cart"/>
                                         <field name="color" widget="color"/>
-                                        <field name="card_style"/>
-                                        <field name="prefix"/>
-                                        <field name="suffix"/>
+                                        <field name="card_style" widget="radio" options="{'horizontal': true}"/>
                                     </group>
-                                    <group>
-                                        <field name="measure_field_id"
-                                               invisible="type != 'card_sum'"/>
-                                        <field name="click_action_id"/>
+                                    <group string="Card Details" invisible="type == 'chart'">
+                                        <field name="prefix" placeholder="Rp"/>
+                                        <field name="suffix" placeholder="orders"/>
+                                        <field name="measure_field_id" 
+                                               invisible="type != 'card_sum'"
+                                               required="type == 'card_sum'"
+                                               options="{'no_create': True}"/>
+                                        <field name="click_action_id" placeholder="Action to open on click..."/>
                                     </group>
-                                </group>
-                            </page>
-                            <page string="Chart Configuration"
-                                  invisible="type != 'chart'">
-                                <group>
-                                    <group>
-                                        <field name="chart_type"/>
-                                        <field name="group_by_field_id"/>
-                                        <field name="measure_field_id"/>
-                                        <field name="chart_label"/>
-                                    </group>
-                                    <group>
+
+                                    <!-- Chart Specific -->
+                                    <group string="Chart Visuals" invisible="type != 'chart'">
+                                        <field name="chart_type" widget="selection"/>
+                                        <field name="chart_label" placeholder="Dataset Legend Label"/>
+                                        <field name="color" widget="color" string="Primary Color"/>
                                         <field name="chart_legend"/>
-                                        <field name="label"/>
-                                        <field name="color" widget="color"/>
+                                    </group>
+                                    <group string="Chart Data" invisible="type != 'chart'">
+                                        <field name="group_by_field_id" 
+                                               required="type == 'chart'"
+                                               options="{'no_create': True}"/>
+                                        <field name="measure_field_id" 
+                                               options="{'no_create': True}"
+                                               help="Leave empty to use count."/>
+                                        <field name="label" string="Header Title" placeholder="Title above chart"/>
                                     </group>
                                 </group>
                             </page>
-                            <page string="Layout &amp; Access">
+                            <page string="Layout &amp; Access" name="layout">
                                 <group>
-                                    <group string="Grid Position">
+                                    <group string="Grid Position (Internal)">
                                         <field name="pos_x"/>
                                         <field name="pos_y"/>
-                                        <field name="pos_w"/>
-                                        <field name="pos_h"/>
+                                        <field name="pos_w" string="Width (1-12)"/>
+                                        <field name="pos_h" string="Height"/>
+                                        <field name="sequence"/>
                                     </group>
-                                    <group string="Access Control">
-                                        <field name="group_ids" widget="many2many_tags"/>
+                                    <group string="Permissions">
+                                        <field name="group_ids" widget="many2many_tags" 
+                                               placeholder="Restrict to these groups..."/>
                                     </group>
                                 </group>
                             </page>

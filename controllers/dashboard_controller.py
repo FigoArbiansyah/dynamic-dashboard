@@ -42,11 +42,13 @@ class DynamicDashboardController(http.Controller):
         for item in layout:
             comp = Component.browse(item.get('id'))
             if comp.exists() and comp.board_id.id == board_id:
+                new_sequence = (item.get('y', 0) + 1) * 10  # convert index to sequence (10, 20, 30…)
                 comp.write({
                     'pos_x': item.get('x', 0),
                     'pos_y': item.get('y', 0),
                     'pos_w': item.get('w', 4),
                     'pos_h': item.get('h', 2),
+                    'sequence': new_sequence,
                 })
         return {'status': 'ok'}
 

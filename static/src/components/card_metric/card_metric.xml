@@ -6,11 +6,13 @@
          t-att-style="cardStyle"
          t-on-click="handleClick">
 
+        <!-- Icon -->
         <div class="dd-card-icon">
             <i t-att-class="'fa ' + (props.comp.icon || 'fa-chart-bar')"
                t-att-style="iconStyle"/>
         </div>
 
+        <!-- Body -->
         <div class="dd-card-body">
             <div class="dd-card-label" t-esc="props.comp.label || props.comp.name"/>
             <div class="dd-card-value">
@@ -24,9 +26,10 @@
             </div>
         </div>
 
+        <!-- Arrow for clickable -->
         <t t-if="isClickable">
             <div class="dd-card-arrow">
-                <i class="fa fa-arrow-right"/>
+                <i class="fa fa-chevron-right"/>
             </div>
         </t>
     </div>

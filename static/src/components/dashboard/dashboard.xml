@@ -8,27 +8,30 @@
         <t t-if="state.loading">
             <div class="dd-loading">
                 <div class="dd-spinner"/>
-                <span>Loading dashboard...</span>
+                <span>Loading dashboard…</span>
             </div>
         </t>
 
         <!-- Error state -->
         <t t-elif="state.error">
             <div class="dd-error">
-                <i class="fa fa-exclamation-triangle"/>
+                <i class="fa fa-exclamation-circle"/>
                 <p t-esc="state.error"/>
             </div>
         </t>
 
         <!-- Dashboard content -->
         <t t-else="">
-            <!-- Header toolbar -->
+
+            <!-- Header -->
             <div class="dd-header">
                 <h2 class="dd-title" t-esc="state.boardData.name"/>
                 <div class="dd-toolbar" t-if="state.canEdit">
-                    <button class="btn dd-btn dd-btn-ghost" t-on-click="toggleEditMode">
-                        <i t-att-class="state.editMode ? 'fa fa-check' : 'fa fa-edit'"/>
-                        <t t-esc="state.editMode ? ' Done' : ' Edit Layout'"/>
+                    <button
+                        t-att-class="'btn dd-btn ' + (state.editMode ? 'dd-btn-ghost dd-btn-active' : 'dd-btn-ghost')"
+                        t-on-click="toggleEditMode">
+                        <i t-att-class="state.editMode ? 'fa fa-check' : 'fa fa-pencil'"/>
+                        <t t-esc="state.editMode ? 'Done Editing' : 'Edit Layout'"/>
                     </button>
                     <button class="btn dd-btn dd-btn-primary" t-if="state.editMode"
                             t-on-click="openAddComponent">
@@ -40,20 +43,21 @@
             <!-- Grid -->
             <div class="dd-grid" t-ref="grid">
                 <t t-foreach="state.boardData.components" t-as="comp" t-key="comp.id">
-                    <div class="dd-component"
-                         t-att-data-comp-id="comp.id"
-                         t-att-data-x="comp.pos ? comp.pos.x : 0"
-                         t-att-data-y="comp.pos ? comp.pos.y : 0"
-                         t-att-data-w="comp.pos ? comp.pos.w : 4"
-                         t-att-data-h="comp.pos ? comp.pos.h : 2"
-                         t-att-style="'grid-column: span ' + (comp.pos ? comp.pos.w : 4)">
+                    <div
+                        t-att-class="'dd-component' + (state.editMode ? ' dd-edit-active' : '')"
+                        t-att-data-comp-id="comp.id"
+                        t-att-data-x="comp.pos ? comp.pos.x : 0"
+                        t-att-data-y="comp.pos ? comp.pos.y : 0"
+                        t-att-data-w="comp.pos ? comp.pos.w : 4"
+                        t-att-data-h="comp.pos ? comp.pos.h : 2"
+                        t-att-style="'grid-column: span ' + (comp.pos ? comp.pos.w : 4)">
 
                         <!-- Drag handle (edit mode only) -->
                         <div class="dd-drag-handle" t-if="state.editMode">
                             <i class="fa fa-arrows"/>
                         </div>
 
-                        <!-- Edit/Delete controls -->
+                        <!-- Edit/Delete controls (fade in on hover, shown in edit mode) -->
                         <div class="dd-comp-actions" t-if="state.editMode">
                             <button class="btn dd-icon-btn" title="Edit" t-on-click="() => this.openEditComponent(comp)">
                                 <i class="fa fa-cog"/>
@@ -69,7 +73,8 @@
                         <!-- Error display -->
                         <t t-if="comp.error">
                             <div class="dd-comp-error">
-                                <i class="fa fa-warning"/> <t t-esc="comp.error"/>
+                                <i class="fa fa-exclamation-circle"/>
+                                <t t-esc="comp.error"/>
                             </div>
                         </t>
 
@@ -82,21 +87,25 @@
                         <t t-elif="comp.type === 'chart'">
                             <ChartWidget comp="comp"/>
                         </t>
+
                     </div>
                 </t>
 
                 <!-- Empty state -->
                 <t t-if="state.boardData.components.length === 0">
                     <div class="dd-empty">
-                        <i class="fa fa-tachometer"/>
+                        <div class="dd-empty-icon">
+                            <i class="fa fa-tachometer"/>
+                        </div>
                         <p>No components yet.</p>
                         <button class="btn dd-btn dd-btn-primary" t-if="state.canEdit"
                                 t-on-click="openAddComponent">
-                            Add your first component
+                            <i class="fa fa-plus"/> Add your first component
                         </button>
                     </div>
                 </t>
             </div>
+
         </t>
     </div>
 </t>
