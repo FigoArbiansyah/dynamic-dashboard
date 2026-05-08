@@ -36,7 +36,9 @@
                         </div>
                         <group>
                             <group string="Configuration">
+                                <field name="menu_parent_id"/>
                                 <field name="menu_id"/>
+                                <field name="dashboard_action_id" readonly="1"/>
                                 <field name="is_active"/>
                                 <field name="cache_ttl"/>
                                 <field name="company_id" groups="base.group_multi_company"/>

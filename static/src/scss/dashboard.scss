@@ -4,16 +4,17 @@
 // ═══════════════════════════════════════════════════════
 
 // ── Variables ─────────────────────────────────────────
-$dd-gap: 16px;
-$dd-radius: 10px;
-$dd-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-$dd-shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.12);
+$dd-gap: 18px;
+$dd-radius: 12px;
+$dd-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+$dd-shadow-hover: 0 8px 24px rgba(15, 23, 42, 0.08);
 $dd-transition: all 0.2s ease;
 
 // ── Dashboard Container ───────────────────────────────
 .dd-dashboard {
-    padding: 20px;
+    padding: 22px;
     min-height: 400px;
+    background: #f8fafc;
 
     // ── Loading ──────────────────────────────────────
     .dd-loading {
@@ -48,20 +49,23 @@ $dd-transition: all 0.2s ease;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 20px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid #e5e7eb;
+        margin-bottom: 22px;
+        padding: 14px 16px;
+        border: 1px solid #edf1f6;
+        border-radius: 12px;
+        background: #ffffff;
 
         .dd-title {
-            font-size: 1.4rem;
-            font-weight: 600;
+            font-size: 1.15rem;
+            font-weight: 700;
             color: #111827;
             margin: 0;
+            letter-spacing: .2px;
         }
 
         .dd-toolbar {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
     }
 
@@ -78,6 +82,14 @@ $dd-transition: all 0.2s ease;
         position: relative;
         border-radius: $dd-radius;
         transition: $dd-transition;
+        background: #fff;
+        border: 1px solid #edf2f7;
+        box-shadow: $dd-shadow;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: $dd-shadow-hover;
+        }
 
         &:hover .dd-comp-actions {
             opacity: 1;
@@ -98,10 +110,11 @@ $dd-transition: all 0.2s ease;
         left: 8px;
         z-index: 10;
         cursor: grab;
-        color: rgba(255, 255, 255, 0.7);
+        color: #64748b;
         padding: 4px;
-        background: rgba(0,0,0,0.15);
-        border-radius: 4px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
         font-size: 12px;
         line-height: 1;
 
@@ -118,11 +131,33 @@ $dd-transition: all 0.2s ease;
         opacity: 0;
         transition: opacity 0.15s;
 
-        .btn {
-            padding: 2px 6px;
-            font-size: 11px;
-            border-radius: 4px;
-            line-height: 1.4;
+    }
+
+    .dd-icon-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        color: #475569;
+        padding: 0;
+
+        &:hover {
+            background: #f8fafc;
+            color: #0f172a;
+        }
+    }
+
+    .dd-icon-btn-danger {
+        color: #b91c1c;
+        border-color: #fecaca;
+
+        &:hover {
+            background: #fef2f2;
+            color: #991b1b;
         }
     }
 
@@ -139,31 +174,80 @@ $dd-transition: all 0.2s ease;
     .dd-empty {
         grid-column: span 12;
         text-align: center;
-        padding: 80px 20px;
-        color: #9ca3af;
+        padding: 72px 20px;
+        color: #64748b;
+        background: #fff;
+        border: 1px dashed #dbe2ec;
+        border-radius: 14px;
 
-        i { display: block; margin-bottom: 12px; }
+        i {
+            display: inline-flex;
+            width: 56px;
+            height: 56px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            color: #334155;
+            font-size: 20px;
+        }
         p { margin-bottom: 16px; font-size: 15px; }
+    }
+}
+
+.dd-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 34px;
+    padding: 0 12px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid transparent;
+}
+
+.dd-btn-ghost {
+    color: #334155;
+    background: #fff;
+    border-color: #dbe4f0;
+
+    &:hover {
+        background: #f8fafc;
+        color: #0f172a;
+    }
+}
+
+.dd-btn-primary {
+    color: #fff;
+    background: #4f46e5;
+
+    &:hover {
+        background: #4338ca;
+        color: #fff;
     }
 }
 
 // ── Card Metric ───────────────────────────────────────
 .dd-card {
-    padding: 20px;
+    padding: 18px;
     border-radius: $dd-radius;
-    box-shadow: $dd-shadow;
+    box-shadow: none;
     display: flex;
     align-items: center;
     gap: 16px;
     min-height: 80px;
     height: 100%;
     transition: $dd-transition;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: #ffffff;
 
     &--clickable {
         cursor: pointer;
         &:hover {
             transform: translateY(-2px);
-            box-shadow: $dd-shadow-hover;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.10);
         }
     }
 
@@ -175,7 +259,7 @@ $dd-transition: all 0.2s ease;
         align-items: center;
         justify-content: center;
         border-radius: 8px;
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.3);
 
         i { font-size: 22px; }
     }
@@ -187,10 +271,9 @@ $dd-transition: all 0.2s ease;
 
     .dd-card-label {
         font-size: 12px;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        opacity: 0.85;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+        opacity: 0.9;
         margin-bottom: 4px;
         white-space: nowrap;
         overflow: hidden;
@@ -198,7 +281,7 @@ $dd-transition: all 0.2s ease;
     }
 
     .dd-card-value {
-        font-size: 26px;
+        font-size: 24px;
         font-weight: 700;
         line-height: 1;
         white-space: nowrap;
@@ -221,10 +304,10 @@ $dd-transition: all 0.2s ease;
     // Style variants
     &--outline {
         background: #fff;
-        border: 2px solid;
+        border: 1px solid;
     }
     &--soft {
-        background: transparent;
+        background: #f8fafc;
         border: 1px solid;
     }
 }
@@ -233,8 +316,8 @@ $dd-transition: all 0.2s ease;
 .dd-chart-widget {
     background: #fff;
     border-radius: $dd-radius;
-    box-shadow: $dd-shadow;
-    padding: 16px;
+    box-shadow: none;
+    padding: 14px;
     height: 100%;
     min-height: 200px;
     display: flex;
@@ -297,9 +380,5 @@ $dd-transition: all 0.2s ease;
 
 // ── Dark mode support ─────────────────────────────────
 @media (prefers-color-scheme: dark) {
-    .dd-dashboard .dd-header .dd-title { color: #f9fafb; }
-    .dd-dashboard .dd-header { border-bottom-color: #374151; }
-    .dd-chart-widget { background: #1f2937; }
-    .dd-chart-widget .dd-chart-header .dd-chart-title { color: #e5e7eb; }
-    .dd-card--outline { background: #1f2937 !important; }
+    .dd-dashboard { background: #f8fafc; }
 }

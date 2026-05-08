@@ -4,16 +4,14 @@ import { Component, useState, onWillStart, onMounted, useRef } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
 import { CardMetric } from "../card_metric/card_metric";
 import { ChartWidget } from "../chart_widget/chart_widget";
-import { ConfigDialog } from "../config_dialog/config_dialog";
 import { registry } from "@web/core/registry";
 
 export class DynamicDashboard extends Component {
     static template = "dynamic_dashboard.DashboardView";
-    static components = { CardMetric, ChartWidget, ConfigDialog };
+    static components = { CardMetric, ChartWidget };
 
     setup() {
         this.rpc = useService("rpc");
-        this.dialog = useService("dialog");
         this.notification = useService("notification");
         this.action = useService("action");
 
@@ -110,22 +108,33 @@ export class DynamicDashboard extends Component {
     }
 
     openAddComponent() {
-        this.dialog.add(ConfigDialog, {
-            boardId: this.boardId,
-            onSave: async () => {
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            name: "Add Component",
+            res_model: "dashboard.component",
+            views: [[false, "form"]],
+            target: "new",
+            context: {
+                default_board_id: this.boardId,
+            },
+        }, {
+            onClose: async () => {
                 await this._loadDashboard();
-                this.notification.add("Component added!", { type: "success" });
             },
         });
     }
 
     openEditComponent(comp) {
-        this.dialog.add(ConfigDialog, {
-            boardId: this.boardId,
-            component: comp,
-            onSave: async () => {
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            name: "Edit Component",
+            res_model: "dashboard.component",
+            res_id: comp.id,
+            views: [[false, "form"]],
+            target: "new",
+        }, {
+            onClose: async () => {
                 await this._loadDashboard();
-                this.notification.add("Component updated!", { type: "success" });
             },
         });
     }

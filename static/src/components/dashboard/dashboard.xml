@@ -26,11 +26,11 @@
             <div class="dd-header">
                 <h2 class="dd-title" t-esc="state.boardData.name"/>
                 <div class="dd-toolbar" t-if="state.canEdit">
-                    <button class="btn btn-sm btn-secondary" t-on-click="toggleEditMode">
+                    <button class="btn dd-btn dd-btn-ghost" t-on-click="toggleEditMode">
                         <i t-att-class="state.editMode ? 'fa fa-check' : 'fa fa-edit'"/>
                         <t t-esc="state.editMode ? ' Done' : ' Edit Layout'"/>
                     </button>
-                    <button class="btn btn-sm btn-primary" t-if="state.editMode"
+                    <button class="btn dd-btn dd-btn-primary" t-if="state.editMode"
                             t-on-click="openAddComponent">
                         <i class="fa fa-plus"/> Add Component
                     </button>
@@ -50,18 +50,18 @@
 
                         <!-- Drag handle (edit mode only) -->
                         <div class="dd-drag-handle" t-if="state.editMode">
-                            <i class="fa fa-grip-vertical"/>
+                            <i class="fa fa-arrows"/>
                         </div>
 
                         <!-- Edit/Delete controls -->
                         <div class="dd-comp-actions" t-if="state.editMode">
-                            <button class="btn btn-xs btn-light" t-on-click="() => this.openEditComponent(comp)">
+                            <button class="btn dd-icon-btn" title="Edit" t-on-click="() => this.openEditComponent(comp)">
                                 <i class="fa fa-cog"/>
                             </button>
-                            <button class="btn btn-xs btn-light" t-on-click="() => this.refreshComponent(comp)">
+                            <button class="btn dd-icon-btn" title="Refresh" t-on-click="() => this.refreshComponent(comp)">
                                 <i class="fa fa-refresh"/>
                             </button>
-                            <button class="btn btn-xs btn-danger" t-on-click="() => this.deleteComponent(comp.id)">
+                            <button class="btn dd-icon-btn dd-icon-btn-danger" title="Delete" t-on-click="() => this.deleteComponent(comp.id)">
                                 <i class="fa fa-trash"/>
                             </button>
                         </div>
@@ -88,9 +88,9 @@
                 <!-- Empty state -->
                 <t t-if="state.boardData.components.length === 0">
                     <div class="dd-empty">
-                        <i class="fa fa-tachometer fa-3x"/>
+                        <i class="fa fa-tachometer"/>
                         <p>No components yet.</p>
-                        <button class="btn btn-primary" t-if="state.canEdit"
+                        <button class="btn dd-btn dd-btn-primary" t-if="state.canEdit"
                                 t-on-click="openAddComponent">
                             Add your first component
                         </button>
