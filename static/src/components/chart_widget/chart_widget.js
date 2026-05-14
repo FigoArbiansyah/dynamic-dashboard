@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, onMounted, onWillUnmount, onWillUpdateProps, useRef } from "@odoo/owl";
+import { Component, useEffect, useRef } from "@odoo/owl";
 
 // Chart color palette
 const CHART_COLORS = [
@@ -17,14 +17,13 @@ export class ChartWidget extends Component {
         this.canvasRef = useRef("canvas");
         this._chart = null;
 
-        onMounted(() => this._renderChart());
-        onWillUnmount(() => this._destroyChart());
-        onWillUpdateProps((nextProps) => {
-            if (nextProps.comp !== this.props.comp) {
-                this._destroyChart();
-                // chart will be re-rendered via onMounted of next render
-            }
-        });
+        useEffect(
+            () => {
+                this._renderChart();
+                return () => this._destroyChart();
+            },
+            () => [this.props.comp]
+        );
     }
 
     _destroyChart() {
